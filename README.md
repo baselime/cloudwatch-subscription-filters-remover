@@ -1,5 +1,5 @@
 # cloudwatch-subscription-filters-remover
-A service to loop through your CloudWatch logs groups and remove the subscription filters matching a criteria
+A service to loop through your CloudWatch log groups and remove the subscription filters matching a criteria
 
 ---
 
@@ -50,4 +50,4 @@ where:
 - `<region>` is the AWS region
 - `<account-id>` is your AWS account id
 - `<prefix>` is the prefix of the subscriptions filters to delete
- 
+
