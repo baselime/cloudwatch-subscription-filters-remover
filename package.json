@@ -1,0 +1,19 @@
+{
+  "name": "cloudwatch-subscription-filters-remover",
+  "version": "1.0.0",
+  "description": "A lambda function to loop through your CloudWatch logs groups and remove the subscription filters matching a criteria",
+  "main": "./src/main.js",
+  "scripts": {
+    "deploy:prod": "sls deploy --stage prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Baselime/cloudwatch-subscription-filters-remover.git"
+  },
+  "author": "Boris Tane",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Baselime/cloudwatch-subscription-filters-remover/issues"
+  },
+  "homepage": "https://github.com/Baselime/cloudwatch-subscription-filters-remover#readme"
+}

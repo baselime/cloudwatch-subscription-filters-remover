@@ -1,0 +1,35 @@
+service: cloudwatch-sub-filters-remover
+  
+resources:
+  - ${file(./resources/queues.yml)}
+
+custom:
+  region: eu-west-2
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  memorySize: 1024
+  stage: ${opt:stage}
+  region: "${self:custom.region}"
+  logRetentionInDays: 7
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - logs:DeleteSubscriptionFilter
+            - logs:DescribeSubscriptionFilters
+            - logs:DescribeLogGroups
+          Resource:
+            - "*"
+
+functions:
+  command:
+    handler: ./src/main.command
+    timeout: 120
+    description: ${opt:stage} - Hanlde commands
+    events:
+      - sqs:
+          arn: !GetAtt CommandsQueue.Arn
+          batchSize: 1

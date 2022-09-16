@@ -1,0 +1,29 @@
+Resources:
+  CommandsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "cloudwatch-subscription-filters-remover-queue"
+      VisibilityTimeout: 240
+      RedrivePolicy: 
+        deadLetterTargetArn: !GetAtt CommandsDeadLetterQueue.Arn
+        maxReceiveCount: 1
+  
+  CommandsDeadLetterQueue: 
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "cloudwatch-subscription-filters-remover-dead-letter-queue"
+
+  CommandsQueuePolicy: 
+    Type: AWS::SQS::QueuePolicy
+    Properties: 
+      Queues: 
+        - !Ref CommandsQueue
+      PolicyDocument: 
+        Statement: 
+          - 
+            Action: 
+              - "SQS:*" 
+            Effect: "Allow"
+            Resource: !GetAtt CommandsQueue.Arn
+            Principal:  
+              AWS: !Ref AWS::AccountId
