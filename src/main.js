@@ -12,11 +12,18 @@ async function listLogGroups() {
   let groups = [];
   let marker = null;
   do {
-    const { logGroups, nextToken } = (await logs.describeLogGroups({ nextToken: marker }).promise());
-    if (logGroups) {
-      groups = [...groups, ...logGroups];
+    try {
+      const { logGroups, nextToken } = (await logs.describeLogGroups({ nextToken: marker }).promise());
+      if (logGroups) {
+        groups = [...groups, ...logGroups];
+      }
+      marker = nextToken;
+      await delay(100);
+    } catch (error) {
+      console.error(JSON.stringify({ message: "Wait 5 seconds before doing anything", error }));
+      console.log(error);
+      await delay(5000);
     }
-    marker = nextToken;
   } while (marker);
   return groups;
 }
@@ -60,7 +67,7 @@ async function command(event) {
         filterName: subscription.filterName
       };
       count += 1;
-      await delay(count * 10);
+      await delay(count * 100);
       await logs.deleteSubscriptionFilter(params).promise();
       logger.info("Deleted the subscription filter", { params });
       return logGroupName;
