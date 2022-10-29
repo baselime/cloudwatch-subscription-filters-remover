@@ -20,8 +20,6 @@ This lambda function has no other deps than the AWS SDK which is provided in the
 
 The service is deployed with the [Serverless Framework](https://serverless.com). Please make sure you have the serverless CLI installed locally or if using a CI pipeline, it must be installed in your CI environment.
 
-Before deployment, ensure you've edited the region in the `serverless.yml` file. The default region is `eu-west-2`.
-
 Run the following command to deploy:
 
 ``` bash
