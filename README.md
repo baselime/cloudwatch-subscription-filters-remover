@@ -43,7 +43,7 @@ where `<prefix>` is the prefix of the subscription filters you want to delete.
 You can send those messages to the queue using the [AWS Console](https://aws.amazon.com) or with the AWS CLI:
 
 ```bash
-aws sqs send-message --queue-url https://sqs.<region>.amazonaws.com/<account-id>/cloudwatch-subscription-filters-remover-dead-letter-queue --message-body '{"prefix": "<prefix>"}'
+aws sqs send-message --queue-url https://sqs.<region>.amazonaws.com/<account-id>/cloudwatch-subscription-filters-remover-queue --message-body '{"prefix": "<prefix>"}'
 ```
 
 where:
