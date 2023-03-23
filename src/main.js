@@ -53,11 +53,13 @@ async function command(event) {
     logger.info("Processing log group", { group: group.logGroupName });
     const { logGroupName } = group;
 
+    let subscription;
+
     try {
       const subscriptions = (await logs.describeSubscriptionFilters({ logGroupName, }).promise()).subscriptionFilters;
       logger.info("The subscription filters found for this log group", { logGroupName, subscriptions, });
       if (!subscriptions || subscriptions.length === 0) return;
-      const subscription = subscriptions.find(s => s.filterName.startsWith(message.prefix));
+      subscription = subscriptions.find(s => s.filterName.startsWith(message.prefix));
       if (!subscription) return;
     } catch (error) {
       if (error.code === "ThrottlingException") {
@@ -66,7 +68,7 @@ async function command(event) {
           const subscriptions = (await logs.describeSubscriptionFilters({ logGroupName, }).promise()).subscriptionFilters;
           logger.info("The subscription filters found for this log group", { logGroupName, subscriptions, });
           if (!subscriptions || subscriptions.length === 0) return;
-          const subscription = subscriptions.find(s => s.filterName.startsWith(message.prefix));
+          subscription = subscriptions.find(s => s.filterName.startsWith(message.prefix));
           if (!subscription) return;
         } catch (error) {
           logger.error("There was an error listing the log subscription filter", { error, params });
@@ -78,11 +80,12 @@ async function command(event) {
       }
     }
 
+    const params = {
+      logGroupName,
+      filterName: subscription.filterName
+    };
+
     try {
-      const params = {
-        logGroupName,
-        filterName: subscription.filterName
-      };
       await logs.deleteSubscriptionFilter(params).promise();
       logger.info("Deleted the subscription filter", { params });
       return logGroupName;
